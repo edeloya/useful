@@ -1,0 +1,15 @@
+    ffmpeg -i clip.mp4 `
+    -i clip2.mov `
+    -filter_complex "[0][1]xfade=duration=10:offset=1:transition=wipeleft,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" fadeblack.gif
+
+ffmpeg `
+-r 24000/1001 -i '<INPUT>' `
+-r 24000/1001 -i '<INPUT>' `
+-filter_complex "[0]crop=iw/2:ih:0:0[left];`
+[1]crop=iw/2:ih:iw/2:0[right];`
+[left][right]scale2ref[old][new];`
+[old]pad=(iw+2):color=red[L];`
+[L][new]hstack=inputs=2[all]" `
+-map "[all][1:a]" -c:v libx265 -preset slow -crf 24 `
+-c:a libopus -b:a 128k '<OUTPUT>' -y
+
