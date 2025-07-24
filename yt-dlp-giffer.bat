@@ -7,7 +7,7 @@ SET /p res="Resolution (# only): "
 ::piping youtube-dl STDOUT to findstr in the (''). Trouble chars in for loop escaped with ^ and with / in youtube-dl and findstr
 ::FOR loops through "tokens" in the findstr output, storing them for use with SET
 ::you can specify "tokens=3" to ONLY set vartmp to the 3rd "word" from the findstr output
-FOR /f "tokens=*" %%a in ('youtube-dl "%url%" ^| findstr "[\"].*[\"]"') do (SET vartmp=%%a)
+FOR /f "tokens=*" %%a in ('yt-dlp --restrict-filenames --get-filename "%url%"') do (SET vartmp=%%a)
 SET coolvid=%vartmp:~30%
 
 ::Takes full coolvid and cuts it by time into output.mp4. -y allows file overwrites. End the line with 2>nul to hide ffmpeg text
