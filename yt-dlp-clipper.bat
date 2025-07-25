@@ -9,6 +9,9 @@ SET /p t="End (seconds or timecode): "
 FOR /f "tokens=*" %%a in ('yt-dlp --restrict-filenames --get-filename "%url%"') do (SET vartmp=%%a)
 SET coolvid=%vartmp%
 
+::Download video
+yt-dlp --restrict-filenames "%url%"
+
 ::Takes full coolvid and cuts it by time into output.mp4. -y allows file overwrites. End the line with 2>nul to hide ffmpeg text
 ffmpeg -ss %ss% -to %t% -i %coolvid% output.mp4 -y 2>nul
 
