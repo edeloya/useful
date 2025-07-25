@@ -11,7 +11,7 @@ FOR /f "tokens=*" %%a in ('yt-dlp --restrict-filenames --get-filename "%url%"') 
 SET coolvid=%vartmp:~30%
 
 ::Takes full coolvid and cuts it by time into output.mp4. -y allows file overwrites. End the line with 2>nul to hide ffmpeg text
-ffmpeg -ss %ss% -to %t% -i %coolvid% -vf "fps=15,scale=-2:%res%:flags=lanczos,split[s0][s1];[s0]palettegen=stats_mode=single[p];[s1][p]paletteuse" -loop 0 output.gif -y
+ffmpeg -ss %ss% -to %t% -i %coolvid% -vf "fps=15,scale=-2:%res%:flags=lanczos,split[s0][s1];[s0]palettegen=stats_mode=single[p];[s1][p]paletteuse" output.gif -y
 
 ::delet full video after
 del %coolvid%
