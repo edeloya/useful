@@ -12,7 +12,7 @@ cmake -B build
 cmake --build build --config Release
 bash ./models/download-ggml-model.sh base.en
 
-if ! type transcribe_audio &>/dev/null; then
+if ! grep -q "transcribe_audio()" "$PREFIX/etc/bash.bashrc"; then
   cat >> "$PREFIX/etc/bash.bashrc" << 'EOF'
 
 
@@ -26,5 +26,6 @@ transcribe_audio() {
 }
 EOF
 fi
+
 yes | termux-setup-storage >/dev/null 2>&1
 echo -e "\n\nRun:\n. \$PREFIX/etc/bash.bashrc"
