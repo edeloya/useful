@@ -23,8 +23,8 @@ transcribe_audio() {
   ~/whisper.cpp/build/bin/whisper-cli -f - \
   -m ~/whisper.cpp/models/ggml-base.en.bin \
   -l en -otxt -of "$(dirname "$1")/$(basename "$1" | sed 's/\.[^.]*$//')"
-  
 }
 EOF
 fi
-termux-setup-storage
+yes | termux-setup-storage >/dev/null 2>&1
+echo -e "\nRun:\n\n. \$PREFIX/etc/bash.bashrc"
