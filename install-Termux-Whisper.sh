@@ -25,16 +25,9 @@ transcribe_audio() {
   input_file="$1"
   input_dir="$(dirname "$input_file")"
   base_name="$(basename "$input_file" | sed 's/\.[^.]*$//')"
-  wav_file="$input_dir/${base_name}_temp.wav"
 
-  # Convert to WAV in same directory
-  ffmpeg -i "$input_file" -f wav "$wav_file"
-
-  # Run Whisper-cli
-  ~/whisper.cpp/build/bin/whisper-cli -m ~/whisper.cpp/models/ggml-base.en.bin -f "$wav_file" -l en -otxt -of "$input_dir/$base_name"
-
-  # Clean up temp WAV
-  rm -f "$wav_file"
+  # Convert to WAV in-place and pipe to Whisper-cli
+  ffmpeg -i "$input_file" -ac 1 -ar 16000 -f wav - |  ~/whisper.cpp/build/bin/whisper-cli -f - -m ~/whisper.cpp/models/ggml-base.en.bin -l en -otxt -of "$input_dir/$base_name"
 }
 EOF
 fi
