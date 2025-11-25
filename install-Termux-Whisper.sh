@@ -29,3 +29,4 @@ transcribe_audio() {
 }
 EOF
 fi
+termux-setup-storage
