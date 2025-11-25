@@ -1,8 +1,8 @@
 #!/bin/bash
 set -x
 cd ~
-pkg update -y
-pkg upgrade -y
+pkg update
+DEBIAN_FRONTEND=noninteractive pkg upgrade -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold"
 pkg install -y git cmake clang make ffmpeg curl
 git clone --depth 1 https://github.com/ggerganov/whisper.cpp.git
 cd whisper.cpp
