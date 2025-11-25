@@ -27,4 +27,4 @@ transcribe_audio() {
 EOF
 fi
 yes | termux-setup-storage >/dev/null 2>&1
-echo -e "\nRun:\n\n. \$PREFIX/etc/bash.bashrc"
+echo -e "\n\nRun:\n. \$PREFIX/etc/bash.bashrc"
