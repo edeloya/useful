@@ -2,9 +2,11 @@
 set -x
 cd ~
 termux-setup-storage
-pkg update -y && pkg upgrade -y
+pkg update -y
+pkg upgrade -y
 pkg install -y git cmake clang make ffmpeg curl
-git clone --depth 1 https://github.com/ggerganov/whisper.cpp.git & cd whisper.cpp
+git clone --depth 1 https://github.com/ggerganov/whisper.cpp.git
+cd whisper.cpp
 cmake -B build
 cmake --build build --config Release
 bash ./models/download-ggml-model.sh base.en
