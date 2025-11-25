@@ -38,5 +38,3 @@ transcribe_audio() {
 }
 EOF
 fi
-
-source $PREFIX/etc/bash.bashrc
