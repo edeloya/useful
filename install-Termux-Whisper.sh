@@ -18,14 +18,12 @@ if ! type transcribe_audio &>/dev/null; then
 
 # Whisper.cpp
 transcribe_audio() {
-  input_dir="$(dirname "$1")"
-  base_name="$(basename "$1" | sed 's/\.[^.]*$//')"
-
   # Convert to WAV in-place and pipe to Whisper-cli
-  ffmpeg -i "$input_file" -ac 1 -ar 16000 -f wav - |\
+  ffmpeg -i "$1" -ac 1 -ar 16000 -f wav - |\
   ~/whisper.cpp/build/bin/whisper-cli -f - \
   -m ~/whisper.cpp/models/ggml-base.en.bin \
-  -l en -otxt -of "$input_dir/$base_name"
+  -l en -otxt -of "$(dirname "$1")/$(basename "$1" | sed 's/\.[^.]*$//')"
+  
 }
 EOF
 fi
