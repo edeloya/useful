@@ -1,7 +1,6 @@
 #!/bin/bash
 set -x
 cd ~
-termux-setup-storage
 pkg update -y
 pkg upgrade -y
 pkg install -y git cmake clang make ffmpeg curl
