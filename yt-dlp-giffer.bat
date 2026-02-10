@@ -4,17 +4,25 @@ SET /p ss="Start (seconds or timecode): "
 SET /p t="End (seconds or timecode): "
 SET /p res="Resolution (# only): "
 
-::piping youtube-dl STDOUT to findstr in the (''). Trouble chars in for loop escaped with ^ and with / in youtube-dl and findstr
-::FOR loops through "tokens" in the findstr output, storing them for use with SET
-::you can specify "tokens=3" to ONLY set vartmp to the 3rd "word" from the findstr output
-FOR /f "tokens=*" %%a in ('yt-dlp --restrict-filenames --get-filename "%url%"') do (SET vartmp=%%a)
-SET coolvid=%vartmp%
+:: Get filename from yt-dlp
+FOR /F "tokens=*" %%a IN ('yt-dlp --restrict-filenames --get-filename "%url%"') DO SET vartmp=%%a
 
-::Takes full coolvid and cuts it by time into output.mp4. -y allows file overwrites. End the line with 2>nul to hide ffmpeg text
-ffmpeg -ss %ss% -to %t% -i %coolvid% -vf "fps=15,scale=-2:%res%:flags=lanczos,split[s0][s1];[s0]palettegen=stats_mode=single[p];[s1][p]paletteuse" gif.gif -y
+:: Extract full filename (robust way)
+FOR %%f IN ("%vartmp%") DO SET coolvid=%%~nxf
 
-::delet full video after
-del %coolvid%
+:: Check if file exists
+IF NOT EXIST "%coolvid%" (
+    ECHO Error: File %coolvid% not found.
+    PAUSE
+    EXIT /B 1
+)
+
+:: Run ffmpeg
+ffmpeg -ss %ss% -to %t% -i "%coolvid%" -vf "fps=15,scale=-2:%res%:flags=lanczos,split[s0][s1];[s0]palettegen=stats_mode=single[p];[s1][p]paletteuse" output.gif -y
+
+:: Delete original file
+del "%coolvid%" /f /q
+
 PAUSE
 
 ::more info at:
@@ -29,3 +37,4 @@ PAUSE
 ::-vf "scale=-2:360,setpts=0.5*PTS" -> -vf uses filters/params in QUOTES, delimited by COMMA
 ::scale=h:w, -n to make sure its a multiple of n (-2 tells it to autoscale to an even h at approx natural aspect ratio to 360)
 ::setpts=0.5*PTS, change presentation timestamp by multiple. .5*PTS speeds up video by 
+
