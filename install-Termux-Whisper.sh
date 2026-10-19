@@ -10,7 +10,7 @@ git clone --depth 1 https://github.com/ggerganov/whisper.cpp.git
 cd whisper.cpp
 cmake -B build
 cmake --build build --config Release
-bash ./models/download-ggml-model.sh base.en
+bash ./models/download-ggml-model.sh base
 
 if ! grep -q "transcribe_audio()" "$PREFIX/etc/bash.bashrc"; then
   cat >> "$PREFIX/etc/bash.bashrc" << 'EOF'
@@ -21,7 +21,7 @@ transcribe_audio() {
   # Convert to WAV in-place and pipe to Whisper-cli
   ffmpeg -i "$1" -ac 1 -ar 16000 -f wav - |\
   ~/whisper.cpp/build/bin/whisper-cli -f - \
-  -m ~/whisper.cpp/models/ggml-base.en.bin \
+  -m ~/whisper.cpp/models/ggml-base.bin \
   -l en -otxt -of "$(dirname "$1")/$(basename "$1" | sed 's/\.[^.]*$//')"
 }
 EOF
